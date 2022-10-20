@@ -6,10 +6,10 @@ import { RouterLink, RouterView } from 'vue-router';
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">{{ $t("home") }}</RouterLink>
-        <RouterLink to="/news">{{ $t("news") }}</RouterLink>
-        <RouterLink to="/admin">{{ $t("admin") }}</RouterLink>
-        <RouterLink to="/new_orders">{{ $t("new orders") }}</RouterLink>
+        <RouterLink to="/">{{ $t("routes.home") }}</RouterLink>
+        <RouterLink to="/news">{{ $t("routes.news") }}</RouterLink>
+        <RouterLink to="/admin">{{ $t("routes.admin") }}</RouterLink>
+        <RouterLink to="/new_orders">{{ $t("routes.new orders") }}</RouterLink>
       </nav>
     </div>
     <div class="locale-changer">
