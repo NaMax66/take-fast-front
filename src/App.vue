@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView } from 'vue-router';
 </script>
 
 <template>
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">{{ $t("Home") }}</RouterLink>
-        <RouterLink to="/news">About</RouterLink>
-        <RouterLink to="/admin">Admin</RouterLink>
-        <RouterLink to="/new_orders">New orders</RouterLink>
+        <RouterLink to="/">{{ $t("home") }}</RouterLink>
+        <RouterLink to="/news">{{ $t("news") }}</RouterLink>
+        <RouterLink to="/admin">{{ $t("admin") }}</RouterLink>
+        <RouterLink to="/new_orders">{{ $t("new orders") }}</RouterLink>
       </nav>
     </div>
     <div class="locale-changer">

@@ -1,1 +1,2 @@
-/// <reference types="vite/client" />
+declare module '@/locales/ru'
+declare module '@/locales/en'
