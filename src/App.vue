@@ -11,18 +11,18 @@ import routes from '@/router/routes';
         <RouterLink :to="routes.news.path">{{ $t("routes.news") }}</RouterLink>
         <RouterLink :to="routes.admin.path">{{ $t("routes.admin") }}</RouterLink>
         <RouterLink :to="routes.newOrders.path">{{ $t("routes.new orders") }}</RouterLink>
+        <div class="locale-changer">
+          <select v-model="$i18n.locale">
+            <option
+                v-for="locale in $i18n.availableLocales"
+                :key="`locale-${locale}`"
+                :value="locale"
+            >
+              {{ locale }}
+            </option>
+          </select>
+        </div>
       </nav>
-    </div>
-    <div class="locale-changer">
-      <select v-model="$i18n.locale">
-        <option
-          v-for="locale in $i18n.availableLocales"
-          :key="`locale-${locale}`"
-          :value="locale"
-        >
-          {{ locale }}
-        </option>
-      </select>
     </div>
   </header>
 
@@ -32,12 +32,6 @@ import routes from '@/router/routes';
 <style scoped>
 header {
   line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
 }
 
 nav {
@@ -45,6 +39,7 @@ nav {
   font-size: 12px;
   text-align: center;
   margin-top: 2rem;
+  margin-bottom: 4rem;
 }
 
 nav a.router-link-exact-active {
@@ -65,30 +60,8 @@ nav a:first-of-type {
   border: 0;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.locale-changer {
+  display: inline-block;
 }
+
 </style>

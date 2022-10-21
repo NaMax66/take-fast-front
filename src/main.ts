@@ -7,6 +7,8 @@ import router from './router'
 import ru from '@/locales/ru'
 import en from '@/locales/en'
 
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import './assets/main.css'
 
 const i18n = createI18n({

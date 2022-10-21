@@ -11,7 +11,7 @@ const router = createRouter({
       name: routes.home.name,
       component: TheOrder
     },
-    {
+    /*{
       path: routes.news.path,
       name: routes.news.name,
       component: () => import('../views/TheNews.vue')
@@ -25,7 +25,7 @@ const router = createRouter({
       path: routes.admin.path,
       name: routes.admin.name,
       component: () => import('../views/TheAdmin.vue')
-    }
+    }*/
   ]
 })
 

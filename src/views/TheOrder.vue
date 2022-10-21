@@ -1,3 +1,121 @@
+<script lang="ts">
+import VModal from '@/components/VModal.vue'
+import { v4 as uuidv4 } from 'uuid'
+import { useOrderStore } from '@/stores/order'
+import { useSocketIO } from '@/plugins/socket.io'
+
+export default {
+  components: {
+    VModal
+  },
+
+  setup() {
+    let isModalShown = false
+    let isModalSuccessShown = false
+    let isModalErrorShown = false
+    let phone = ''
+    let name = ''
+    let address = ''
+    let comment = ''
+    let isOperatorPhoneShown = false
+    const operatorPhone = '8-928-047-11-00'
+
+    const order = useOrderStore()
+    const { socket } = useSocketIO()
+
+    socket.emit('getPrice', null, (data: any) => {
+      order.setPrice(data)
+    })
+
+    const getProductPrice = (product: any) => {
+      const productInOrder = order.getOrder.find(el => el.id === product.id)
+      let total = 0
+      if (productInOrder) {
+        total = productInOrder.price * productInOrder.amount
+      }
+      return total
+    }
+
+    const getAmount = (product: any) => {
+      const productInOrder = order.getOrder.find(el => el.id === product.id)
+      return productInOrder && productInOrder.amount ? productInOrder.amount : 0
+    }
+
+    const addAmount = (operator: any, id: any) => {
+      order.addToOrder({ operator, id })
+    }
+
+    const handleActionBtn = () => {
+      isModalShown = true
+    }
+
+    const sendOrder = async () => {
+      const newOrder = {
+        id: uuidv4(),
+        newOrder: order.getOrder,
+        name,
+        phone,
+        address,
+        comment: comment.substring(0, 3000),
+        total: order.getTotalOrderSum,
+        time: new Date().toLocaleString()
+      }
+      socket.emit('newOrderFromClient', newOrder, (msg: string) => {
+        if (msg === 'ok') {
+          showModalSuccess()
+        } else {
+          showModalError()
+        }
+      })
+
+      isModalShown = false
+    }
+
+    const showModalSuccess = () => {
+      isModalSuccessShown = true
+    }
+
+    const showModalError = () => {
+      isModalErrorShown = true
+    }
+
+    const closeModalSuccess = () => {
+      isModalSuccessShown = false
+      order.clearOrder()
+      comment = ''
+    }
+
+    const closeModalError = () => {
+      isModalErrorShown = false
+      isOperatorPhoneShown = true
+    }
+
+    return {
+      isOperatorPhoneShown,
+      operatorPhone,
+      getPrice: order.getPrice,
+      addAmount,
+      sendOrder,
+      getAmount,
+      getProductPrice,
+      getTotalOrderSum: order.getTotalOrderSum,
+      handleActionBtn,
+
+      isModalShown,
+      isModalSuccessShown,
+      isModalErrorShown,
+      closeModalSuccess,
+      closeModalError,
+
+      phone,
+      name,
+      address,
+      comment
+    }
+  }
+}
+</script>
+
 <template>
   <div class="container">
     <h1 class="text-danger mb-5" v-if="isOperatorPhoneShown">{{$t('warnings.connectToUsMsg')}} <br> {{operatorPhone}}</h1>
@@ -17,7 +135,7 @@
         <tr v-for="(product, index) in getPrice.list" :key="product.id">
           <td scope="row">{{ index }}</td>
           <td>{{product.name}}</td>
-          <td>{{getNicePrice(product.price) }}</td>
+          <td>{{product.price }}</td>
           <td>{{product.packageAmount}} <span>{{$t('units.piece')}}</span></td>
           <th scope="col" style="min-width: 110px;">
             <div class="btn-group" role="group" aria-label="Basic example">
@@ -30,7 +148,7 @@
         </tr>
         <tr>
           <td colspan="5" class="text-right font-weight-bold">{{$t('table.superTotal')}}</td>
-          <td>{{getNicePrice(getTotalOrderSum)}}</td>
+          <td>{{ getTotalOrderSum }}</td>
         </tr>
         </tbody>
       </table>
@@ -57,7 +175,6 @@
             <button type="button" class="btn btn-danger" @click="sendOrder">{{$t('makeOrder')}}</button>
           </div>
     </v-modal>
-    <!-- todo add validator -->
     <v-modal :is-modal-shown="isModalSuccessShown">
       <div class="modal-body">
         <h3 v-html="$t('newOrderModal.successMsg')"></h3>
@@ -78,106 +195,3 @@
     </v-modal>
   </div>
 </template>
-
-<script>
-import { getNicePrice } from '@/utils'
-import { mapGetters, mapActions } from 'vuex'
-import VModal from '@/components/VModal'
-import { v4 as uuidv4 } from 'uuid'
-
-export default {
-  components: {
-    VModal
-  },
-  data: () => ({
-    isModalShown: false,
-    isModalSuccessShown: false,
-    isModalErrorShown: false,
-    phone: '',
-    name: '',
-    address: '',
-    comment: '',
-    isOperatorPhoneShown: false,
-    operatorPhone: '8-928-047-11-00'
-  }),
-  computed: {
-    ...mapGetters(['getPrice', 'getOrder', 'getTotalOrderSum'])
-  },
-  created () {
-    this.$socket.emit('getPrice', null, (data) => {
-      this.setPrice(data)
-    })
-  },
-  methods: {
-    ...mapActions(['addToOrder', 'clearOrder', 'setPrice']),
-    getNicePrice (price) {
-      return getNicePrice(price, this.$t('currency'))
-    },
-    getProductPrice (product) {
-      const productInOrder = this.getOrder.find(el => el.id === product.id)
-      let total = this.getNicePrice(0)
-      if (productInOrder) {
-        total = this.getNicePrice(productInOrder.price * productInOrder.amount)
-      }
-      return total
-    },
-    getAmount (product) {
-      const productInOrder = this.getOrder.find(el => el.id === product.id)
-      return productInOrder && productInOrder.amount ? productInOrder.amount : 0
-    },
-    addAmount (operator, id) {
-      this.addToOrder({ operator, id })
-    },
-    handleActionBtn () {
-      this.isModalShown = true
-    },
-    async sendOrder () {
-      /* todo add the unique order number from server */
-      const order = {
-        id: uuidv4(),
-        newOrder: this.getOrder,
-        name: this.name,
-        phone: this.phone,
-        address: this.address,
-        comment: this.comment.substring(0, 3000),
-        total: this.getTotalOrderSum,
-        time: new Date().toLocaleString()
-      }
-      this.$socket.emit('newOrderFromClient', order, (msg) => {
-        if (msg === 'ok') {
-          this.showModalSuccess()
-        } else {
-          this.showModalError()
-        }
-      })
-      this.isModalShown = false
-    },
-    showModalSuccess () {
-      this.isModalSuccessShown = true
-    },
-    showModalError () {
-      this.isModalErrorShown = true
-    },
-    closeModalSuccess () {
-      this.isModalSuccessShown = false
-      this.clearOrder()
-      this.comment = ''
-    },
-    closeModalError () {
-      this.isModalErrorShown = false
-      this.isOperatorPhoneShown = true
-    }
-  }
-}
-</script>
-
-<style scoped>
-.modalBackground {
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.62);
-}
-</style>
