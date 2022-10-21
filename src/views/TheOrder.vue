@@ -3,6 +3,7 @@ import VModal from '@/components/VModal.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useOrderStore } from '@/stores/order'
 import { useSocketIO } from '@/plugins/socket.io'
+import { ref } from 'vue';
 
 export default {
   components: {
@@ -10,7 +11,7 @@ export default {
   },
 
   setup() {
-    let isModalShown = false
+    let isModalShown = ref(false)
     let isModalSuccessShown = false
     let isModalErrorShown = false
     let phone = ''
@@ -38,7 +39,7 @@ export default {
 
     const getAmount = (product: any) => {
       const productInOrder = order.getOrder.find(el => el.id === product.id)
-      return productInOrder && productInOrder.amount ? productInOrder.amount : 0
+      return productInOrder?.amount || 0
     }
 
     const addAmount = (operator: any, id: any) => {
@@ -46,7 +47,7 @@ export default {
     }
 
     const handleActionBtn = () => {
-      isModalShown = true
+      isModalShown.value = true
     }
 
     const sendOrder = async () => {
@@ -68,7 +69,7 @@ export default {
         }
       })
 
-      isModalShown = false
+      isModalShown.value = false
     }
 
     const showModalSuccess = () => {
