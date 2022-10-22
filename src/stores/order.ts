@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import type { Product } from '@/DTO/Product'
+import type { PriceList } from '@/DTO/PriceList'
 
 type State = {
   order: Product[],
-  priceList: { category: string, list: Product[] }
+  priceList: PriceList
 }
 
 export const useOrderStore = defineStore('order', {
@@ -31,6 +32,10 @@ export const useOrderStore = defineStore('order', {
   },
 
   actions: {
+    SOCKET_initialPrice (message: PriceList) {
+      this.priceList = message
+    },
+
     addToOrder({ operator, id }: { operator: 'plus' | 'minus', id: any }) {
     const el = this.order.find(el => el.id === id)
     if (el) {
