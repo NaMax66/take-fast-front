@@ -14,10 +14,12 @@ export default {
     let isModalShown = ref(false)
     let isModalSuccessShown = false
     let isModalErrorShown = false
+
     let phone = ''
     let name = ''
     let address = ''
     let comment = ''
+
     let isOperatorPhoneShown = false
     const operatorPhone = '8-928-047-11-00'
 
@@ -94,12 +96,11 @@ export default {
     return {
       isOperatorPhoneShown,
       operatorPhone,
-      getPrice: order.getPrice,
+      order,
       addAmount,
       sendOrder,
       getAmount,
       getProductPrice,
-      getTotalOrderSum: order.getTotalOrderSum,
       handleActionBtn,
 
       isModalShown,
@@ -121,7 +122,7 @@ export default {
   <div class="container">
     <h1 class="text-danger mb-5" v-if="isOperatorPhoneShown">{{$t('warnings.connectToUsMsg')}} <br> {{operatorPhone}}</h1>
     <div class="overflow-auto">
-      <table class="table table-sm table-striped" v-if="getPrice">
+      <table class="table table-sm table-striped" v-if="order.getPrice">
         <thead>
         <tr>
           <th scope="col">{{ $t('table.num') }}</th>
@@ -133,7 +134,7 @@ export default {
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(product, index) in getPrice.list" :key="product.id">
+        <tr v-for="(product, index) in order.getPrice.list" :key="product.id">
           <td scope="row">{{ index }}</td>
           <td>{{product.name}}</td>
           <td>{{product.price }}</td>
@@ -149,7 +150,7 @@ export default {
         </tr>
         <tr>
           <td colspan="5" class="text-right font-weight-bold">{{$t('table.superTotal')}}</td>
-          <td>{{ getTotalOrderSum }}</td>
+          <td>{{ order.getTotalOrderSum }}</td>
         </tr>
         </tbody>
       </table>

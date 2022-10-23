@@ -27,7 +27,7 @@ export const useOrderStore = defineStore('order', {
 
   getters: {
     getPrice: (state) =>  state.priceList,
-    getTotalOrderSum: (state) =>  0,
+    getTotalOrderSum: (state) =>  state.order.reduce((acc, el) => acc + el.price * el.amount, 0),
     getOrder: (state) =>  state.order
   },
 
