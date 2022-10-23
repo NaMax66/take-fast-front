@@ -88,7 +88,7 @@ export default {
     const closeModalSuccess = () => {
       isModalSuccessShown = false
       order.clearOrder()
-      comment = ''
+      comment.value = ''
     }
 
     const closeModalError = () => {

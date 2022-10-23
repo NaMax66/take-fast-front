@@ -4,6 +4,7 @@ import TheOrder from '@/views/TheOrder.vue'
 import routes from '@/router/routes';
 
 const router = createRouter({
+  // @ts-ignore
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
