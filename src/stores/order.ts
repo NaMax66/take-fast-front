@@ -54,11 +54,11 @@ export const useOrderStore = defineStore('order', {
 },
 
     clearOrder() {
-      console.log('clear')
+      this.order = []
     },
 
-    setPrice(obj: any) {
-      console.log(obj)
+    setPrice(priceList: PriceList) {
+      this.priceList = priceList
     }
   }
 })

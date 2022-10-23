@@ -15,10 +15,10 @@ export default {
     let isModalSuccessShown = false
     let isModalErrorShown = false
 
-    let phone = ''
-    let name = ''
-    let address = ''
-    let comment = ''
+    let phone = ref('')
+    let name = ref('')
+    let address = ref('')
+    let comment = ref('')
 
     let isOperatorPhoneShown = false
     const operatorPhone = '8-928-047-11-00'
@@ -56,13 +56,16 @@ export default {
       const newOrder = {
         id: uuidv4(),
         newOrder: order.getOrder,
-        name,
-        phone,
-        address,
-        comment: comment.substring(0, 3000),
+        name: name.value,
+        phone: phone.value,
+        address: address.value,
+        comment: comment.value.substring(0, 3000),
         total: order.getTotalOrderSum,
         time: new Date().toLocaleString()
       }
+
+      console.log(newOrder)
+
       socket.emit('newOrderFromClient', newOrder, (msg: string) => {
         if (msg === 'ok') {
           showModalSuccess()
