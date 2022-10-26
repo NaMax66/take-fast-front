@@ -3,9 +3,9 @@ import VModal from '@/components/VModal.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useOrderStore } from '@/stores/order'
 import { useSocketIO } from '@/plugins/socket.io'
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue'
 
-export default {
+export default defineComponent({
   components: {
     VModal
   },
@@ -53,13 +53,16 @@ export default {
     const sendOrder = async () => {
       const newOrder = {
         id: uuidv4(),
-        newOrder: order.getOrder,
+
         name: name.value,
         phone: phone.value,
         address: address.value,
         comment: comment.value.substring(0, 3000),
+        time: new Date().toLocaleString(),
+
         total: order.getTotalOrderSum,
-        time: new Date().toLocaleString()
+
+        newOrder: order.getOrder
       }
 
       socket.emit('newOrderFromClient', newOrder, (msg: string) => {
@@ -115,7 +118,7 @@ export default {
       comment
     }
   }
-}
+})
 </script>
 
 <template>
