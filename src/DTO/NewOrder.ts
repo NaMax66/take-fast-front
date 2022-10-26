@@ -1,10 +1,12 @@
 import type { Product } from '@/DTO/Product';
 
 export type NewOrder = {
+  id: string,
   name?: string,
-  phone?: string,
+  phone: string,
   address?: string,
   comment?: string,
   time: string,
-  newOrder: Product[]
+  total: number
+  newOrder: Product[],
 }
