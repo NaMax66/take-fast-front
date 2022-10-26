@@ -11,17 +11,17 @@ export default {
   },
 
   setup() {
+    let isOperatorPhoneShown = ref(false)
+    const operatorPhone = '8-928-047-11-00'
+
     let isModalShown = ref(false)
-    let isModalSuccessShown = false
-    let isModalErrorShown = false
+    let isModalSuccessShown = ref(false)
+    let isModalErrorShown = ref(false)
 
     let phone = ref('')
     let name = ref('')
     let address = ref('')
     let comment = ref('')
-
-    let isOperatorPhoneShown = false
-    const operatorPhone = '8-928-047-11-00'
 
     const order = useOrderStore()
     const { socket } = useSocketIO()
@@ -32,15 +32,13 @@ export default {
 
     const getProductPrice = (product: any) => {
       const productInOrder = order.getOrder.find(el => el.id === product.id)
-      let total = 0
-      if (productInOrder) {
-        total = productInOrder.price * productInOrder.amount
-      }
-      return total
+
+      return productInOrder ? productInOrder.price * productInOrder.amount : 0
     }
 
     const getAmount = (product: any) => {
       const productInOrder = order.getOrder.find(el => el.id === product.id)
+
       return productInOrder?.amount || 0
     }
 
@@ -48,7 +46,7 @@ export default {
       order.addToOrder({ operator, id })
     }
 
-    const handleActionBtn = () => {
+    const makeOrder = () => {
       isModalShown.value = true
     }
 
@@ -64,8 +62,6 @@ export default {
         time: new Date().toLocaleString()
       }
 
-      console.log(newOrder)
-
       socket.emit('newOrderFromClient', newOrder, (msg: string) => {
         if (msg === 'ok') {
           showModalSuccess()
@@ -78,38 +74,39 @@ export default {
     }
 
     const showModalSuccess = () => {
-      isModalSuccessShown = true
+      isModalSuccessShown.value = true
     }
 
     const showModalError = () => {
-      isModalErrorShown = true
+      isModalErrorShown.value = true
     }
 
-    const closeModalSuccess = () => {
-      isModalSuccessShown = false
+    const onCheckout = () => {
+      isModalSuccessShown.value = false
       order.clearOrder()
       comment.value = ''
     }
 
     const closeModalError = () => {
-      isModalErrorShown = false
-      isOperatorPhoneShown = true
+      isModalErrorShown.value = false
+      isOperatorPhoneShown.value = true
     }
 
     return {
       isOperatorPhoneShown,
       operatorPhone,
+
       order,
       addAmount,
       sendOrder,
       getAmount,
       getProductPrice,
-      handleActionBtn,
+      handleActionBtn: makeOrder,
 
       isModalShown,
       isModalSuccessShown,
       isModalErrorShown,
-      closeModalSuccess,
+      closeModalSuccess: onCheckout,
       closeModalError,
 
       phone,

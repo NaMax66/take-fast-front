@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TheOrder from '@/views/TheOrder.vue'
+import PriceList from '@/views/PriceList.vue'
 
 import routes from '@/router/routes';
 
@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: routes.home.path,
       name: routes.home.name,
-      component: TheOrder
+      component: PriceList
     },
     /*{
       path: routes.news.path,
