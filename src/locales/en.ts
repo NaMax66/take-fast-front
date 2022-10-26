@@ -37,10 +37,12 @@ export default {
     enter: 'Submit'
   },
   routes: {
-    home: 'home',
+    home: 'price list',
     news: 'news',
     admin: 'admin',
     'new orders': 'new orders',
+    forClient: 'Route managed by client',
+    forAdmin: 'Route managed by supplier'
   },
   units: {
     piece: ''

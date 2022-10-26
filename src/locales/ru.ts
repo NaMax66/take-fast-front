@@ -37,10 +37,12 @@ export default {
     enter: 'Войти'
   },
   routes: {
-    home: 'главная',
+    home: 'прайс-лист',
     news: 'новости',
     admin: 'админ',
     'new orders': 'новые заказы',
+    forClient: 'Раздел для клиента',
+    forAdmin: 'Раздел для администратора'
   },
   units: {
     piece: 'шт'

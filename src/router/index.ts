@@ -12,15 +12,15 @@ const router = createRouter({
       name: routes.home.name,
       component: PriceList
     },
-    /*{
-      path: routes.news.path,
-      name: routes.news.name,
-      component: () => import('../views/TheNews.vue')
-    },
     {
       path: routes.newOrders.path,
       name: routes.newOrders.name,
       component: () => import('../views/NewOrders.vue')
+    },
+    /*{
+      path: routes.news.path,
+      name: routes.news.name,
+      component: () => import('../views/TheNews.vue')
     },
     {
       path: routes.admin.path,
