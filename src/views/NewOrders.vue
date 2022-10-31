@@ -8,11 +8,13 @@ export default defineComponent({
     const order = useOrderStore()
     const { socket } = useSocketIO()
 
-    socket.emit('getNewOrders', (data: unknown) => {
+    socket.emit('getNewOrders')
+    socket.on('newOrderFromServer', (data: unknown) => {
       order.updateNewOrders(data)
     })
 
     function removeOrder(orderId: string) {
+      socket.emit('removeOrder', orderId)
       order.removeNewOrder(orderId)
     }
 
