@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { useOrderStore } from '@/stores/order'
 import { useSocketIO } from '@/plugins/socket.io'
 import { defineComponent, ref } from 'vue'
+import type { PriceList } from "@/DTO/PriceList";
+import type { Product } from "@/DTO/Product";
 
 export default defineComponent({
   components: {
@@ -26,22 +28,23 @@ export default defineComponent({
     const order = useOrderStore()
     const { socket } = useSocketIO()
 
-    socket.emit('getPrice', null, (data: any) => {
+    socket.emit('getPrice', null, (data: unknown) => {
       order.setPrice(data)
     })
 
-    const getProductPrice = (product: any) => {
+    const getProductPrice = (product: Product) => {
       const productInOrder = order.getOrder.find(el => el.id === product.id)
 
       return productInOrder ? productInOrder.price * productInOrder.amount : 0
     }
 
-    const getAmount = (product: any) => {
+    const getAmount = (product: Product) => {
       const productInOrder = order.getOrder.find(el => el.id === product.id)
 
       return productInOrder?.amount || 0
     }
 
+    /* todo refactor */
     const addAmount = (operator: any, id: any) => {
       order.addToOrder({ operator, id })
     }

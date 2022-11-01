@@ -3,6 +3,8 @@ import type { Product } from '@/DTO/Product'
 import type { PriceList } from '@/DTO/PriceList'
 import type { NewOrder } from '@/DTO/NewOrder';
 
+import { newOrders, priceList } from '@/stores/mock';
+
 type State = {
   order: Product[],
   newOrders: NewOrder[],
@@ -12,36 +14,8 @@ type State = {
 export const useOrderStore = defineStore('order', {
   state: () => ({
     order: [],
-    newOrders: [
-      {
-        id: 'uuid4',
-        name: 'Bob',
-        time: 'Wed Oct 26 2022 12:24:58 GMT+0600',
-        phone: '555-55-55',
-        total: 400,
-        newOrder: [
-          {
-            name: 'Test',
-            id: 'test',
-            amount: 6,
-            packageAmount: 3,
-            price: 120
-          }
-        ]
-      }
-    ],
-    priceList: {
-      category: 'Category',
-      list: [
-        {
-          id: '1',
-          name: 'Example',
-          price: 100,
-          amount: 0,
-          packageAmount: 6
-        }
-      ]
-    }
+    newOrders,
+    priceList,
   }) as State,
 
   getters: {
@@ -77,8 +51,8 @@ export const useOrderStore = defineStore('order', {
       this.newOrders = this.newOrders.filter(el => el.id !== newOrderId)
     },
 
-    setPrice(priceList: PriceList) {
-      this.priceList = priceList
+    setPrice(priceList: unknown) {
+      this.priceList = priceList as PriceList
     },
 
     updateNewOrders(data: unknown) {
