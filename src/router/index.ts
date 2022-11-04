@@ -17,6 +17,11 @@ const router = createRouter({
       name: routes.newOrders.name,
       component: () => import('../views/NewOrders.vue')
     },
+    {
+      path: routes.admin.path,
+      name: routes.admin.name,
+      component: () => import('../views/DataEditor.vue')
+    },
     /*{
       path: routes.news.path,
       name: routes.news.name,

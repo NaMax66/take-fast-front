@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { useOrderStore } from '@/stores/order'
 import { useSocketIO } from '@/plugins/socket.io'
 import { defineComponent, ref } from 'vue'
-import type { PriceList } from "@/DTO/PriceList";
-import type { Product } from "@/DTO/Product";
+
+import type { Product } from '@/DTO/Product'
 
 export default defineComponent({
   components: {
