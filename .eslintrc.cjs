@@ -12,6 +12,7 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    quotes: ['warn', 'single']
+    quotes: ['warn', 'single'],
+    semi: ['warn', 'never']
   }
 }

@@ -1,12 +1,12 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import PriceTable from '@/components/PriceTable.vue'
+import EditablePrice from '@/components/EditablePrice.vue'
 import VTabs from '@/components/VTabs.vue'
 import { useSocketIO } from '@/plugins/socket.io'
 
 export default defineComponent({
   components: {
-    PriceTable,
+    EditablePrice,
     VTabs
   },
 
@@ -36,10 +36,6 @@ export default defineComponent({
       currentTab.value = tab
     }
 
-    function sendToServer(data: any) {
-      socket.emit('updatePrice', data, (msg: string) => console.log(msg))
-    }
-
     return {
       password,
       checkPass,
@@ -47,9 +43,7 @@ export default defineComponent({
 
       currentTab,
       controlTabs,
-      changeControlTab,
-
-      sendToServer
+      changeControlTab
     }
   }
 })
@@ -72,7 +66,7 @@ export default defineComponent({
     </form>
     <div v-if="isAdmin" class="overflow-auto">
       <v-tabs :tabs="controlTabs" default-tab-id="1" @changeTab="changeControlTab" />
-      <price-table v-if="currentTab.name === 'price'" @save="sendToServer"/>
+      <editable-price v-if="currentTab.name === 'price'" />
     </div>
   </div>
 </template>
