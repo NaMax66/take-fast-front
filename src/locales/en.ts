@@ -20,7 +20,7 @@ export default {
     minAmount: 'min. qty',
     inOrder: 'In order, qty',
     total: 'Total',
-    superTotal: 'TOTAL:',
+    totalPrice: 'Total, price',
     title: 'Title',
     subTitle: 'Subtitle',
     text: 'Text',
