@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useSocketIO } from '@/plugins/socket.io'
 import { useAdminStore } from '@/stores/admin'
 import type { PriceList } from '@/DTO/PriceList'
@@ -35,7 +35,7 @@ export default defineComponent({
       })*/
     }
 
-    let newProduct: Omit<Product, 'id'> = reactive({
+    let newProduct = ref<Omit<Product, 'id'>>({
       name: '',
       price: 0,
       packageAmount: 0,
@@ -43,9 +43,8 @@ export default defineComponent({
     })
 
     const handleAdd = () => {
-      addToPriceList({ ...newProduct, id: uuidv4() })
-      newProduct = { ...EMPTY_PRODUCT }
-
+      addToPriceList({ ...newProduct.value, id: uuidv4() })
+      newProduct.value = EMPTY_PRODUCT
     }
 
     return {
