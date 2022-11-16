@@ -5,7 +5,7 @@ import { useAdminStore } from '@/stores/admin'
 import type { PriceList } from '@/DTO/PriceList'
 import type { Product } from '@/DTO/Product'
 import { v4 as uuidv4 } from 'uuid'
-import { storeToRefs } from 'pinia'
+import cloneDeep from 'lodash.clonedeep'
 
 const EMPTY_PRODUCT = {
   name: '',
@@ -19,21 +19,17 @@ export default defineComponent({
     const { socket } = useSocketIO()
     const store = useAdminStore()
     const { setPriceList, removeFromPriceList, addToPriceList } = store
-    const { priceList } = storeToRefs(store)
 
     const removeItem = (product: Product) => {
       removeFromPriceList(product)
     }
 
+    const priceList = ref<PriceList>(cloneDeep(store.priceList))
+
     socket.emit('getPrice', null, (data: unknown) => {
       setPriceList(data as PriceList)
+      priceList.value = cloneDeep(store.priceList)
     })
-
-    const updatePriceListOnServer = () => {
-      /*socket.emit('updatePrice', getPrice, (msg: string) => {
-        console.log(msg)
-      })*/
-    }
 
     let newProduct = ref<Omit<Product, 'id'>>({
       name: '',
@@ -43,14 +39,17 @@ export default defineComponent({
     })
 
     const handleAdd = () => {
-      addToPriceList({ ...newProduct.value, id: uuidv4() })
+      const product = { ...newProduct.value, id: uuidv4() }
+
+      addToPriceList(product)
+      priceList.value.list.push(product)
+
       newProduct.value = EMPTY_PRODUCT
     }
 
     return {
       priceList,
       removeItem,
-      updatePriceListOnServer,
 
       newProduct,
       handleAdd
@@ -74,26 +73,26 @@ export default defineComponent({
       <tr class="v-table_product" v-for="(product, index) in priceList.list" :key="product.id">
         <td>{{index}}</td>
         <td>
-          <input class="w-100 border-0 bg-transparent" type="text" v-model="product.name" @input="updatePriceListOnServer">
+          <input class="w-100 border-0 bg-transparent" type="text" v-model="product.name">
         </td>
         <td class="v-table_price">
-          <input class="w-100 border-0 bg-transparent" type="number" v-model="product.price" @input="updatePriceListOnServer">
+          <input class="w-100 border-0 bg-transparent" type="number" v-model="product.price">
         </td>
         <td class="v-table_pack">
-          <input class="w-100 border-0 bg-transparent" type="number" v-model="product.packageAmount" @input="updatePriceListOnServer">
+          <input class="w-100 border-0 bg-transparent" type="number" v-model="product.packageAmount">
         </td>
         <td><button class="v-table_remove_btn btn btn-danger btn-sm" @click="removeItem(product)">&times;</button></td>
       </tr>
       <tr>
         <td>*</td>
         <td>
-          <input class="w-100 border-0 bg-transparent" type="text" v-model="newProduct.name" @input="updatePriceListOnServer">
+          <input class="w-100 border-0 bg-transparent" type="text" v-model="newProduct.name">
         </td>
         <td class="v-table_price">
-          <input class="w-100 border-0 bg-transparent" type="number" v-model="newProduct.price" @input="updatePriceListOnServer">
+          <input class="w-100 border-0 bg-transparent" type="number" v-model="newProduct.price">
         </td>
         <td class="v-table_pack">
-          <input class="w-100 border-0 bg-transparent" type="number" v-model="newProduct.packageAmount" @input="updatePriceListOnServer">
+          <input class="w-100 border-0 bg-transparent" type="number" v-model="newProduct.packageAmount">
         </td>
         <td><button class="btn btn-success btn-sm" @click="handleAdd">+</button></td>
       </tr>

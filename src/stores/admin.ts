@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia'
 import type { PriceList } from '@/DTO/PriceList'
 import type { Product } from '@/DTO/Product'
+import { useSocketIO } from '@/plugins/socket.io'
 
 type State = {
   priceList: PriceList
 }
+
+const { socket } = useSocketIO()
 
 export const useAdminStore = defineStore('admin', {
   state: () => ({
@@ -21,6 +24,9 @@ export const useAdminStore = defineStore('admin', {
 
     addToPriceList(product: Product) {
       this.priceList.list.push(product)
+      socket.emit('updatePrice', this.priceList, (msg: string) => {
+        console.log(msg)
+      })
     },
 
     removeFromPriceList(product: Product) {
