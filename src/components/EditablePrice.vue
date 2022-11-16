@@ -20,15 +20,15 @@ export default defineComponent({
     const store = useAdminStore()
     const { setPriceList, removeFromPriceList, addToPriceList } = store
 
-    const removeItem = (product: Product) => {
-      removeFromPriceList(product)
-    }
-
     const priceList = ref<PriceList>(cloneDeep(store.priceList))
+
+    const syncLocalPriceList = () => {
+      priceList.value = cloneDeep(store.priceList)
+    }
 
     socket.emit('getPrice', null, (data: unknown) => {
       setPriceList(data as PriceList)
-      priceList.value = cloneDeep(store.priceList)
+      syncLocalPriceList()
     })
 
     let newProduct = ref<Omit<Product, 'id'>>({
@@ -42,9 +42,14 @@ export default defineComponent({
       const product = { ...newProduct.value, id: uuidv4() }
 
       addToPriceList(product)
-      priceList.value.list.push(product)
+      syncLocalPriceList()
 
       newProduct.value = EMPTY_PRODUCT
+    }
+
+    const removeItem = (product: Product) => {
+      removeFromPriceList(product)
+      syncLocalPriceList()
     }
 
     return {

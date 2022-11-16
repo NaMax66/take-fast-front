@@ -30,7 +30,10 @@ export const useAdminStore = defineStore('admin', {
     },
 
     removeFromPriceList(product: Product) {
-      this.priceList.list.filter(el => el.id !== product.id)
+      this.priceList.list = this.priceList.list.filter(el => el.id !== product.id)
+      socket.emit('updatePrice', this.priceList, (msg: string) => {
+        console.log(msg)
+      })
     }
   }
 })
