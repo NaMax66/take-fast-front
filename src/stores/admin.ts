@@ -18,6 +18,13 @@ export const useAdminStore = defineStore('admin', {
   }) as State,
 
   actions: {
+    fetchPriceList(callback?: Function) {
+      socket.emit('getPrice', null, (data: unknown) => {
+        this.setPriceList(data as PriceList)
+        if (callback) callback()
+      })
+    },
+
     setPriceList(list: PriceList) {
       this.priceList = list
     },

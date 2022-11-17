@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { useSocketIO } from '@/plugins/socket.io'
 import { useAdminStore } from '@/stores/admin'
 import type { PriceList } from '@/DTO/PriceList'
 import type { Product } from '@/DTO/Product'
@@ -16,9 +15,8 @@ const EMPTY_PRODUCT = {
 
 export default defineComponent({
   setup() {
-    const { socket } = useSocketIO()
     const store = useAdminStore()
-    const { setPriceList, removeFromPriceList, addToPriceList } = store
+    const { fetchPriceList, removeFromPriceList, addToPriceList } = store
 
     const priceList = ref<PriceList>(cloneDeep(store.priceList))
 
@@ -26,10 +24,7 @@ export default defineComponent({
       priceList.value = cloneDeep(store.priceList)
     }
 
-    socket.emit('getPrice', null, (data: unknown) => {
-      setPriceList(data as PriceList)
-      syncLocalPriceList()
-    })
+    fetchPriceList(syncLocalPriceList)
 
     let newProduct = ref<Omit<Product, 'id'>>({
       name: '',
