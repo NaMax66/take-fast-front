@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { PriceList } from '@/DTO/PriceList'
 import type { Product } from '@/DTO/Product'
 import { useSocketIO } from '@/plugins/socket.io'
+import cloneDeep from 'lodash.clonedeep'
 
 type State = {
   priceList: PriceList
@@ -25,22 +26,24 @@ export const useAdminStore = defineStore('admin', {
       })
     },
 
+    updatePriceList(callback?: Function) {
+      socket.emit('updatePrice', this.priceList, (msg: string) => {
+        if (callback) callback(msg)
+      })
+    },
+
     setPriceList(list: PriceList) {
-      this.priceList = list
+      this.priceList = cloneDeep(list)
     },
 
     addToPriceList(product: Product) {
-      this.priceList.list.push(product)
-      socket.emit('updatePrice', this.priceList, (msg: string) => {
-        console.log(msg)
-      })
+      this.priceList.list.push(cloneDeep(product))
+      this.updatePriceList(console.log)
     },
 
     removeFromPriceList(product: Product) {
       this.priceList.list = this.priceList.list.filter(el => el.id !== product.id)
-      socket.emit('updatePrice', this.priceList, (msg: string) => {
-        console.log(msg)
-      })
+      this.updatePriceList(console.log)
     }
   }
 })
