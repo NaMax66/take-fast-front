@@ -136,7 +136,7 @@ export default defineComponent({
           <th scope="col">{{ $t('table.price') }}</th>
           <th scope="col">{{ $t('table.minAmount') }}</th>
           <th scope="col">{{ $t('table.inOrder') }}</th>
-          <th scope="col">{{ $t('table.total') }}</th>
+          <th scope="col">{{ $t('table.totalPrice') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -155,7 +155,7 @@ export default defineComponent({
           <td style="min-width: 95px">{{getProductPrice(product)}}</td>
         </tr>
         <tr>
-          <td colspan="5" class="text-right font-weight-bold">{{$t('table.superTotal')}}</td>
+          <td colspan="5" class="text-right font-weight-bold">{{$t('table.total')}}</td>
           <td>{{ order.getTotalOrderSum }}</td>
         </tr>
         </tbody>

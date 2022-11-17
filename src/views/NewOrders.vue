@@ -44,7 +44,7 @@ export default defineComponent({
             <th scope="col">{{$t('table.unitName')}}</th>
             <th scope="col">{{$t('table.price')}}</th>
             <th scope="col">{{$t('table.inOrder')}}</th>
-            <th scope="col">{{$t('table.total')}}</th>
+            <th scope="col">{{$t('table.totalPrice')}}</th>
           </tr>
           </thead>
           <tbody>
@@ -57,7 +57,7 @@ export default defineComponent({
           </tr>
           <tr>
             <td colspan="2"><button class="btn btn-danger btn-sm" @click="removeOrder(orderInfo.id)">&times;</button></td>
-            <td colspan="2" class="text-right">{{$t('table.superTotal')}}</td>
+            <td colspan="2" class="text-right">{{$t('table.total')}}</td>
             <td>{{orderInfo.total}}</td>
           </tr>
           </tbody>
