@@ -53,5 +53,6 @@ export default {
   warnings: {
     errorMsg: 'Failed to place an order automatically',
     connectToUsMsg: 'Contact us by phone:'
-  }
+  },
+  'testing app explanation': 'This is a testing app. Password:'
 } as const

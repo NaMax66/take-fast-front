@@ -2,7 +2,8 @@
 import { defineComponent, ref } from 'vue'
 import EditablePrice from '@/components/EditablePrice.vue'
 import VTabs from '@/components/VTabs.vue'
-import { useSocketIO } from '@/plugins/socket.io'
+
+const TEST_PASS = '1'
 
 export default defineComponent({
   components: {
@@ -11,14 +12,12 @@ export default defineComponent({
   },
 
   setup() {
-    const { socket } = useSocketIO()
+    const password = ref('')
+    const isAdmin = ref(false)
 
-    let password = ''
     function checkPass() {
-      return password === '1'
+      password.value === TEST_PASS ? isAdmin.value = true : isAdmin.value = false
     }
-
-    let isAdmin = true
 
     const controlTabs = [
       {
@@ -40,6 +39,7 @@ export default defineComponent({
       password,
       checkPass,
       isAdmin,
+      TEST_PASS,
 
       currentTab,
       controlTabs,
@@ -52,7 +52,7 @@ export default defineComponent({
 <template>
   <div class="container mb-5">
     <form class="col-lg-4" v-if="!isAdmin">
-      <p>This is a testing app. password: 1</p>
+      <p>{{ $t('testing app explanation') }} {{ TEST_PASS }}</p>
       <div class="form-group">
         <input
             v-model="password"
@@ -62,7 +62,7 @@ export default defineComponent({
             :placeholder="$t('admin.passwordPlaceholder')"
         >
       </div>
-      <button @click.prevent="checkPass" class="btn btn-danger">{{$t('admin.enter')}}</button>
+      <button @click.prevent="checkPass" class="mt-2 btn btn-danger">{{$t('admin.enter')}}</button>
     </form>
     <div v-if="isAdmin" class="overflow-auto">
       <v-tabs :tabs="controlTabs" default-tab-id="1" @changeTab="changeControlTab" />

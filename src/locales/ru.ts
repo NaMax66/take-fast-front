@@ -53,5 +53,6 @@ export default {
   warnings: {
     errorMsg: 'Не удалось оформить заказ автоматически',
     connectToUsMsg: 'Свяжитесь с нами по телефону:'
-  }
+  },
+  'testing app explanation': 'Это приложение служит примером. Пароль: '
 } as const

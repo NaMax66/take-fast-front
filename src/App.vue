@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import routes from '@/router/routes';
+import routes from '@/router/routes'
 </script>
 
 <template>
-  <header>
+  <header class="mt-3">
     <div class="wrapper">
       <nav class="d-flex justify-content-center mb-2">
         <RouterLink :title="$t('routes.forClient')" class="me-4" :to="routes.home.path">{{ $t("routes.home") }}</RouterLink>
